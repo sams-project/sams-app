@@ -1,0 +1,6 @@
+/venv
+/.idea
+.idea/vcs.xml
+/node_modules
+*.xml
+*.ini
