@@ -14,10 +14,7 @@ class OnlineConfig:
         self.is_microphone = True
         self.is_ds18b20 = True
         self.interval_median = ""
-        self.interval_repost_seconds = 0
-        self.interval_repost_attempts = 0
         self.interval_app_wait_seconds = 0
-        self.interval_wait_time_seconds = 0
         self.interval_attempts_before_restart = 0
         self.dht22_pin = 0
         self.audio_duration = 0
@@ -41,10 +38,7 @@ class OnlineConfig:
                 self.is_microphone = data['group']['is_microphone']
                 self.is_ds18b20 = data['group']['is_ds18b20']
                 self.interval_median = data['group']['app_median']
-                self.interval_repost_seconds = data['group']['app_repost_seconds']
-                self.interval_repost_attempts = data['group']['app_repost_attempts']
                 self.interval_app_wait_seconds = data['group']['app_wait_seconds']
-                self.interval_wait_time_seconds = data['group']['app_wait_time_seconds']
                 self.interval_attempts_before_restart = data['group']['app_attempts_before_restart']
                 self.dht22_pin = data['group']['dht22_pin']
                 self.audio_duration = data['group']['audio_duration']
@@ -53,13 +47,12 @@ class OnlineConfig:
 
                 if 'wittyPi' in data.keys():
                     with open(str(mapping.app_witty_pi), "w+") as filehandler:
-                        for settings in data['wittyPi']:
-                            filehandler.writelines("{} {}\n".format(settings, data['wittyPi'][settings]))
+                        filehandler.writelines(data['wittyPi'])
 
-                    with open(str(mapping.witty_pi), "w+") as filehandle:
-                        for settings in data['wittyPi']:
-                            filehandle.writelines("{} {}\n".format(settings, data['wittyPi'][settings]))
+                    with open(str(mapping.witty_pi), "w+") as filehandler:
+                        filehandler.writelines(data['wittyPi'])
                 return True
 
-        except Exception:
+        except Exception as e:
+            print(e)
             return False

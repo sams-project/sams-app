@@ -10,6 +10,7 @@ class LocalConfig:
         self.config.sections()
 
         # DEFAULT
+        self.start = self.config['DEFAULT'].getboolean('start')
         self.group = self.config['DEFAULT']['group']
         self.is_dht22 = self.config['DEFAULT'].getboolean('is_dht22')
         self.is_scale = self.config['DEFAULT'].getboolean('is_scale')
@@ -30,10 +31,7 @@ class LocalConfig:
 
         # INTERVAL
         self.interval_median = self.config['INTERVAL']['median']
-        self.interval_repost_seconds = self.config['INTERVAL']['repost_seconds']
-        self.interval_repost_attempts = self.config['INTERVAL']['repost_attempts']
         self.interval_app_wait_seconds = self.config['INTERVAL']['app_wait_seconds']
-        self.interval_wait_time_seconds = self.config['INTERVAL']['wait_time_seconds']
         self.interval_attempts_before_restart = self.config['INTERVAL']['attempts_before_restart']
 
         # DHT 22
@@ -67,10 +65,7 @@ class LocalConfig:
 
             # INTERVAL
             self.interval_median = self.config['INTERVAL']['median']
-            self.interval_repost_seconds = self.config['INTERVAL']['repost_seconds']
-            self.interval_repost_attempts = self.config['INTERVAL']['repost_attempts']
             self.interval_app_wait_seconds = self.config['INTERVAL']['app_wait_seconds']
-            self.interval_wait_time_seconds = self.config['INTERVAL']['wait_time_seconds']
             self.interval_attempts_before_restart = self.config['INTERVAL']['attempts_before_restart']
 
             # DHT 22

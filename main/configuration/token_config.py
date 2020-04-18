@@ -32,6 +32,12 @@ class TokenConfig:
         self.config.set("DEFAULT", "token_error", error)
         self.write_config()
 
+    def reset_token(self):
+        self.config.set("DEFAULT", "token", "")
+        self.config.set("DEFAULT", "last_token", "")
+        self.config.set("DEFAULT", "expires_in", "")
+        self.write_config()
+
     def write_config(self):
         try:
             with open(mapping.token_config, 'w') as configfile:

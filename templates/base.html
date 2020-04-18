@@ -1,0 +1,36 @@
+<!doctype html>
+<head>
+    <title>{{ title }} - beemo</title>
+    <meta name="apple-mobile-web-app-title" content="SAMS APP">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="anderswodenker">
+    <meta http-equiv="language" content="en">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta content="SAMS Hive" name="apple-mobile-web-app-title">
+    <!-- Icons, Styles and hreflang -->
+    <link href="/favicon.png" rel="shortcut icon" type="image/png">
+    <link href="/apple-touch-icon.png" rel="apple-touch-icon">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}">
+</head>
+<body>
+<header>
+    <div class="logoWrapper">
+        <img src="{{ url_for('static', filename='images/dsn_sams_logo.png') }}" alt="SAMS">
+    </div>
+</header>
+<div class="wrapper" id="app">
+    <section>
+        {% block content %} {% endblock %}
+    </section>
+</div>
+<footer>
+    <ul>
+        <li><a href="/"><i class="icon icon-home"></i></a></li>
+        <li><a href="/settings"><i class="icon icon-settings"></i></a></li>
+    </ul>
+</footer>
+<script async src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>

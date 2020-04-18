@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+    {% if calibrated %}
+        <h1>Please restart your system to run the Datalogger!</h1>
+        <h1><i class="icon icon-check"></i></h1>
+        <form action="{{ url_for('reset') }}" method="post">
+        <button>Restart</button>
+        </form>
+    {% else %}
+        <h1>Something went wrong!</h1>
+        <p>please try again...</p>
+        <a href="/" class="button">Start</a>
+    {% endif %}
+{% endblock %}

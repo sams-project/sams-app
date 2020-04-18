@@ -21,12 +21,6 @@ class ApplicationConfig:
                 self.local_config.set_config_data("DEFAULT", "timezone", self.online_config.timezone)
                 self.local_config.set_config_data("DEFAULT", "debug", self.online_config.debug)
                 self.local_config.set_config_data("INTERVAL", "median", self.online_config.interval_median)
-                self.local_config.set_config_data("INTERVAL", "wait_time_seconds",
-                                                  self.online_config.interval_wait_time_seconds)
-                self.local_config.set_config_data("INTERVAL", "repost_seconds",
-                                                  self.online_config.interval_repost_seconds)
-                self.local_config.set_config_data("INTERVAL", "repost_attempts",
-                                                  self.online_config.interval_repost_attempts)
                 self.local_config.set_config_data("INTERVAL", "app_wait_seconds",
                                                   self.online_config.interval_app_wait_seconds)
                 self.local_config.set_config_data("INTERVAL", "attempts_before_restart",
@@ -35,10 +29,11 @@ class ApplicationConfig:
                 self.local_config.set_config_data("AUDIO", "duration", self.online_config.audio_duration)
                 self.local_config.set_config_data("AUDIO", "fs", self.online_config.audio_fs)
 
-                if self.local_config.get_config_data():
-                    return True
-                else:
-                    return False
+            if self.local_config.get_config_data():
+                return True
+            else:
+                return False
+
 
         except Exception as e:
             send_log("Sync config Error: {}".format(e), "warning")

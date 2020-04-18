@@ -1,13 +1,14 @@
 import requests
-from main.configuration.user_config import UserConfig
 from main.configuration.token_config import TokenConfig
+from main.helper.wifi_helper import WifiHelper
 import mapping
+import time
 
 
 class DataApi:
     def __init__(self):
-        self.user_config = UserConfig()
         self.token_config = TokenConfig()
+        self.wifi_helper = WifiHelper()
 
     # get header with valid token
     def get_header(self):
@@ -20,6 +21,7 @@ class DataApi:
 
     #  send dataset
     def send_data(self, dataset):
+        time.sleep(5)  # wait 5 seconds to prevent response error
         try:
             resp = requests.post(
                 mapping.dwh_data,
@@ -28,11 +30,13 @@ class DataApi:
             )
 
             if resp.status_code == 200:  # Dataset OK
+                self.wifi_helper.update_online_status(True)
                 return True
             if resp.status_code == 400 or resp.status_code == 500:  # 400 or 500 (Dataset corrupted)
                 return "delete"
 
         except Exception:
+            self.wifi_helper.update_online_status(False)
             return False
 
     # get hardware configuration

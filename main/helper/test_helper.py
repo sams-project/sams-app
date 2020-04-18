@@ -3,6 +3,7 @@ from main.configuration.app_config import ApplicationConfig
 from main.helper.microphone_helper import MicrophoneHelper
 from main.dataset import Dataset
 from main.helper.color import Color
+import psutil
 
 
 class AppTest:
@@ -28,6 +29,14 @@ class AppTest:
         # liefert true wenn konfigurationsdatei ist da und kann mit dem dw synchronisiert werden
         pass
 
+    @staticmethod
+    def get_available_space():
+        path = '/'
+        bytes_avail = psutil.disk_usage(path).free
+        gigabytes_avail = bytes_avail / 1024 / 1024 / 1024
+
+        return round(gigabytes_avail, 2)
+
     def dataset_test(self):
         sensors = ["DHT22", "DS18B20", "SCALE"]
         self.color_print.bold("Starting test....")
@@ -44,7 +53,3 @@ class AppTest:
             self.color_print.ok_green("Microphone ..........OK!")
         else:
             self.color_print.fail("Microphone ..........FAILED!")
-
-
-testing = AppTest()
-testing.dataset_test()

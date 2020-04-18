@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+    <nav class="breadcrumb">
+        <a href="/calibrate" class="button-icon"><i class="icon icon-arrow-left"></i></a>
+    </nav>
+    <h1>Calibrate</h1>
+    <div class="formWrapper">
+        <form action="{{ url_for('config_scale') }}" method="post">
+            <input type="number" v-model="weight" name="weight" placeholder="grams">
+            <p>Please enter the item's weight in grams.</p>
+            <button id="button" v-on:click="post" type="submit">Calibrate <i class="icon icon-check"></i></button>
+        </form>
+    </div>
+{% endblock %}
+

@@ -1,13 +1,14 @@
 import rssi
-import os
-from main.configuration.local_config import LocalConfig
+import configparser
+import mapping
 
 
 class WifiHelper:
     def __init__(self):
         self.interface = 'wlan0'
         self.rssi_scanner = rssi.RSSI_Scan(self.interface)
-        self.local_config = LocalConfig()
+        self.config = configparser.ConfigParser()
+        self.config.read(mapping.online_status)
 
     def get_signal_strength(self):
         ap_info = self.rssi_scanner.getAPinfo(sudo=True)
@@ -25,14 +26,25 @@ class WifiHelper:
 
         return strength
 
-    def online_status(self):
+    def update_online_status(self, status):
         try:
-            response = os.system("ping -c 2 " + "google.com")
-            if response == 0:
-                self.local_config.set_config_data("DEFAULT", "is_online", 1)
-                return True
+            self.config.read(mapping.online_status)
+            if status:
+                self.config.set("DEFAULT", "is_online", str(1))
             else:
-                self.local_config.set_config_data("DEFAULT", "is_online", 0)
-                return False
+                self.config.set("DEFAULT", "is_online", str(0))
+            self.write_config()
+
         except Exception:
             return False
+
+    def is_online(self):
+        self.config.read(mapping.online_status)
+        return self.config['DEFAULT'].getboolean('is_online')
+
+    def write_config(self):
+        try:
+            with open(mapping.online_status, 'w') as configfile:
+                self.config.write(configfile)
+        except IOError:
+            pass

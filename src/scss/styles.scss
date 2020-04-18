@@ -1,0 +1,12 @@
+@import "partials/assets/normalize";
+@import "partials/config/variables";
+@import "partials/assets/mixins";
+@import "partials/assets/iconfont";
+@import "partials/config/abstract";
+@import "partials/config/typography";
+@import "partials/config/animations";
+// @import "partials/assets/animate"; //import if u need! animate.css
+@import "partials/navigation";
+@import "partials/main";
+@import "partials/footer";
+@import "partials/components/form";

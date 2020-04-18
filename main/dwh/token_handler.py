@@ -3,7 +3,6 @@ import time
 from main.configuration.user_config import UserConfig
 from main.configuration.token_config import TokenConfig
 from main.helper.time_helper import get_diff_seconds
-from main.helper.wifi_helper import WifiHelper
 import mapping
 from main.dwh.log_message import send_log
 
@@ -12,7 +11,6 @@ class TokenHandler:
     def __init__(self):
         self.user_config = UserConfig()
         self.token_config = TokenConfig()
-        self.wifi_helper = WifiHelper()
         self.expires_in = 0
         self.auth = {}
 
@@ -24,8 +22,7 @@ class TokenHandler:
         }
 
     def get_access_token(self):
-        token_data = self.token_config.read_token()
-        if token_data["expires_in"] == "" or self.get_difference():
+        if self.is_expired():
             try:
                 self.auth = requests.post(
                     mapping.dwh_token,
@@ -43,31 +40,31 @@ class TokenHandler:
                     return True
             except Exception as e:
                 self.token_config.write_token_error(str(e))
+                self.token_config.reset_token()
                 return False
 
-    def get_difference(self):
+    def is_expired(self):
         token_data = self.token_config.read_token()
         last_token = token_data["last_token"]
         expires_in = token_data["expires_in"]
 
-        if 'last_token' in token_data:
+        if last_token != "":
             diff = get_diff_seconds(last_token)
             if diff >= int(expires_in):
-                return True
+                return True  # token is expired
             else:
-                return False
+                return False  # token is valid
         else:
-            return False
+            print("is expired")
+            return True  # no valid token in token.ini
 
     def handle_token(self):
         try:
-            self.get_access_token()
             while True:
                 try:
-                    if self.wifi_helper.online_status() and self.get_difference():
-                        self.get_access_token()
+                    self.get_access_token()
                 except Exception as e:
                     print(e)
-                time.sleep(30)
+                time.sleep(60)
         except Exception as e:
             send_log(f'Handle token error: {e}', "error")

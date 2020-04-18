@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block content %}
+    {% if not user_data %}
+        <h1>User Credentials</h1>
+        <div class="formWrapper userForm">
+            <form action="{{ url_for('set_user') }}" method="post">
+                <label for="user">
+                    <input type="text" name="user" id="user" placeholder="ID">
+                </label>
+                <label for="secret">
+                    <input type="text" name="secret" id="secret" placeholder="SECRET">
+                </label>
+                <button id="save"
+                        type="submit">Save
+                </button>
+            </form>
+        </div>
+    {% else %}
+        {% if calibrated and is_start %}
+            <h1>Your system is ready to use!</h1>
+            <h1><i class="icon icon-check"></i></h1>
+        {% endif %}
+        {% if not calibrated and is_scale %}
+            <h1>Initializing</h1>
+            <strong>Remove any items from scale.</strong>
+            <p>Press "Start" when ready.</p>
+            <a href="/calibrate" class="button">Start</a>
+        {% endif %}
+        {% if not is_start and not is_scale %}
+            <h1>Your system is ready to use!</h1>
+            <strong>Please klick on "Reboot" to start the application</strong>
+            <a href="/reset">Reboot</a>
+        {% endif %}
+    {% endif %}
+{% endblock %}
+
+

@@ -10,7 +10,7 @@ class UserConfig:
         self.client_id = self.config_data['client_id']
         self.client_secret = self.config_data['client_secret']
 
-    def read_user_data(self):
+    def get_user_data(self):
         self.config.read(mapping.user_config)
         self.config_data = self.config['DEFAULT']
         self.client_id = self.config_data['client_id']

@@ -68,6 +68,7 @@ class Scale:
             self.config.set_config_data("SCALE", "ratio", self.ratio)
             self.config.set_config_data("SCALE", "offset", self.hx.get_offset())
             self.config.set_config_data("SCALE", "calibrated", 1)
+            self.config.set_config_data("DEFAULT", "start", 1)
             return True
         except ValueError:
             return False

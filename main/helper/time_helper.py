@@ -1,9 +1,10 @@
 import datetime
-from datetime import timedelta
+import os
+import pytz
 
 
 def get_time(is_dataset=False):
-    now = datetime.datetime.now()
+    now = datetime.datetime.utcnow().replace(tzinfo=pytz.utc)
     if not is_dataset:
         return now.strftime('%Y-%m-%dT%H:%M:%S') + now.strftime('.%f')[:0]
     else:
@@ -18,3 +19,11 @@ def get_diff_seconds(last_time):
         return int(diff.seconds)
     else:
         return False
+
+
+def set_timezone(timezone):
+    try:
+        new_timezone = 'sudo timedatectl set-timezone {}'.format(timezone)
+        os.system(new_timezone)
+    except Exception as e:
+        print(e)

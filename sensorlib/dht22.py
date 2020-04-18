@@ -1,5 +1,4 @@
 import Adafruit_DHT
-from main.dwh.log_message import send_log
 
 
 class DHT22:
@@ -16,4 +15,4 @@ class DHT22:
             return self.data
 
         except Exception as e:
-            send_log(f'DHT22 sensor connected? : {e}', "warning")
+            print(e)
