@@ -5,6 +5,7 @@ from sensorlib.scale import Scale
 from main.helper.wifi_helper import WifiHelper
 from main.helper.test_helper import AppTest
 from main.helper.time_helper import set_timezone
+from main.helper.error_helper import ErrorHelper
 import os
 import time
 
@@ -14,6 +15,7 @@ app_config = ApplicationConfig()
 scale = Scale()
 wifi = WifiHelper()
 testing = AppTest()
+error_helper = ErrorHelper()
 
 
 @app.route('/')
@@ -107,6 +109,8 @@ def setting():
             scale.reset()
         if request.form.get("tare") == "":
             scale.tare()
+        if request.form.get("reset_error") == "":
+            error_helper.reset_errors()
         if request.form.get("user_reset") == "":
             user_config.write_user_data("", "")
 

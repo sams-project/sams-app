@@ -79,7 +79,20 @@
             </div>
         {% endif %}
         <div class="item">
-            <h3>Set Timezone</h3>
+            <div class="tile">
+                <h3>reset errors</h3>
+                <p>Reset all sensor errors</p>
+                <form action="{{ url_for('setting') }}" method="post">
+                    <label for="tare" hidden></label>
+                    <input hidden type="number" name="reset_error" id="reset_error">
+                    <button v-confirm="{message: 'Are you sure?'}" id="reset_error"
+                            type="submit">Reset
+                    </button>
+                </form>
+            </div>
+        </div>
+        <div class="item">
+            <h3>set timezone</h3>
             <form action="{{ url_for('timezone') }}" method="post">
                 <label for="timezone">
                     <select name="timezone">
@@ -586,7 +599,7 @@
         </div>
     </div>
     <div class="textWrapper">
-        <h3>Configuration</h3>
+        <h3>configuration</h3>
         <table>
             <tr>
                 <td>Group</td>

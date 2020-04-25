@@ -5,6 +5,7 @@ from main.helper.wifi_helper import WifiHelper
 from main.helper.dataset_log_helper import DatasetLogHelper
 from main.dwh.data_api import DataApi
 from main.dwh.token_handler import TokenHandler
+from main.helper.error_helper import ErrorHelper
 
 import time
 import os
@@ -23,6 +24,8 @@ class Application:
         self.attempts = 0
         self.dwh_api = DataApi()
         self.token_handler = TokenHandler()
+        self.error_helper = ErrorHelper()
+        self.failed_sensor = ""
 
         self.wifi_helper.update_online_status(False)
 
@@ -30,6 +33,8 @@ class Application:
         send_log(f'Start Application: {self.app_config.local_config.version}', "debug")
         send_log(f'Signal Strength: {self.wifi_helper.get_signal_strength()}', "debug")
         set_timezone(self.app_config.local_config.timezone)
+        for failed_sensor in self.error_helper.get_sensor_with_error():
+            send_log(f'Please check {failed_sensor} and reset all errors to reactivate the sensor.', "warning")
 
     def start(self):
         while True:
@@ -41,13 +46,13 @@ class Application:
                 self.app_config.local_config.get_config_data()
             sensors = []
             try:
-                if self.app_config.local_config.is_ds18b20:
+                if self.app_config.local_config.is_ds18b20 and not self.error_helper.has_error("DS18B20"):
                     sensors.append("DS18B20")  # TEMP SENSOR
-                if self.app_config.local_config.is_dht22:
+                if self.app_config.local_config.is_dht22 and not self.error_helper.has_error("DHT22"):
                     sensors.append("DHT22")  # TEMP and HUMIDITY SENSOR
-                if self.app_config.local_config.is_scale:
+                if self.app_config.local_config.is_scale and not self.error_helper.has_error("SCALE"):
                     sensors.append("SCALE")
-                if self.app_config.local_config.is_microphone:
+                if self.app_config.local_config.is_microphone and not self.error_helper.has_error("MICROPHONE"):
                     sensors.append("MICROPHONE")
 
                 # START GET AND SEND DATASET BLOCK
@@ -57,6 +62,7 @@ class Application:
                         for x in range(len(dataset)):
                             if not dataset[x] or not hasattr(dataset[x], '__len__'):
                                 self.attempts += 1  # sensor is offline or sends no valid data
+                                self.failed_sensor = sensor
                                 send_log(f'{sensor} failed!', "error")
                             else:
                                 response = self.dwh_api.send_data(dataset[x])
@@ -77,6 +83,7 @@ class Application:
 
                 # START CHECKING FAILED ATTEMPTS BLOCK
                 if int(self.attempts) >= int(self.app_config.local_config.interval_attempts_before_restart):
+                    self.error_helper.set_sensor_with_error(self.failed_sensor)
                     self.restart_hive("Too many errors: reboot system!", "error")
                     # todo welcher sensor ist verantwortlich / in extra Datei speichern
                     # todo / in der App anzeigen / Sensor ueberspringen
