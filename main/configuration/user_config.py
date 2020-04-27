@@ -6,18 +6,17 @@ class UserConfig:
     def __init__(self):
         self.config = configparser.ConfigParser()
         self.config.read(mapping.user_config)
-        self.config_data = self.config['DEFAULT']
-        self.client_id = self.config_data['client_id']
-        self.client_secret = self.config_data['client_secret']
+        self.client_id = self.config["DEFAULT"].get("client_id")
+        self.client_secret = self.config["DEFAULT"].get("client_secret")
 
     def get_user_data(self):
         self.config.read(mapping.user_config)
-        self.config_data = self.config['DEFAULT']
-        self.client_id = self.config_data['client_id']
-        self.client_secret = self.config_data['client_secret']
-        data = {"user": self.client_id, "secret": self.client_secret}
-        if data['user'] != "":
-            return data
+        user_data = {}
+        for key in self.config.defaults():
+            user_data[key] = self.config["DEFAULT"].get(key)
+
+        if user_data["client_id"] != "":
+            return user_data
         else:
             return False
 

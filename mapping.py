@@ -1,5 +1,6 @@
 user_config = "/home/pi/user.ini"
 app_config = "/home/pi/application.ini"
+default_config = "/home/pi/default.ini"
 token_config = "/home/pi/token.ini"
 online_status = "/home/pi/sams_system/online.ini"
 app_log = "/home/pi/log/"
