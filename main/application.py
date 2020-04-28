@@ -15,7 +15,7 @@ import os
 import requests
 import mapping
 
-# v2.3
+# v2.4
 
 
 class Application:
@@ -125,8 +125,9 @@ class Application:
 
             if r.status_code == 200:
                 if git_version > self.app_config.local_config.version:
+                    os.system("touch /home/pi/update")
                     copyfile("/home/pi/sams_system/update.py", "/home/pi/update.py")
                     self.app_config.local_config.set_config_data("DEFAULT", "version", git_version)
-                    os.system("python3 /home/pi/update.py")
-        except Exception:
-            pass
+                    self.restart_hive("updating system...", "debug")
+        except Exception as e:
+            print(e)
