@@ -8,6 +8,7 @@ from main.dwh.token_handler import TokenHandler
 from main.helper.error_helper import ErrorHelper
 from main.helper.time_helper import get_time
 from main.helper.time_helper import set_timezone
+from shutil import copyfile
 
 import time
 import os
@@ -121,12 +122,11 @@ class Application:
         try:
             r = requests.get(mapping.version_url)
             git_version = r.content.decode("utf-8")
-            old_version = self.app_config.local_config.version
 
             if r.status_code == 200:
                 if git_version > self.app_config.local_config.version:
-                    os.system("sudo touch /home/pi/update")
+                    copyfile("/home/pi/sams_system/update.py", "/home/pi/update.py")
                     self.app_config.local_config.set_config_data("DEFAULT", "version", git_version)
-                    self.restart_hive(f"Start Update from version: {old_version} to: {git_version}", "debug")
+                    os.system("python3 /home/pi/update.py")
         except Exception:
             pass

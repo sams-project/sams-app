@@ -1,21 +1,11 @@
 from main.application import Application
-from main.configuration.local_config import LocalConfig
 import os
-from shutil import copyfile
 
 
-conf = LocalConfig()
+app = Application()
 
-if conf.start:
-    if os.path.exists("/home/pi/done"):
-        del_update = os.system("rm /home/pi/update.py")
+if os.path.exists("/home/pi/update.py"):
+    os.system("sudo rm /home/pi/update.py")
 
-    if not os.path.exists("/home/pi/update"):
-        app = Application()
-        app.start()
-    else:
-        try:
-            copyfile("/home/pi/sams_system/update.py", "/home/pi/update.py")
-            os.system("sudo reboot")
-        except Exception as e:
-            print(e)
+if app.app_config.local_config.start:
+    app.start()
