@@ -6,3 +6,5 @@
 *.ini
 /src
 *.scss
+*.pyc
+main/__pycache__

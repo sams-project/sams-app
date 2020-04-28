@@ -39,7 +39,6 @@ class Application:
 
     def start(self):
         while True:
-            print("START WHILE")
             self.token_handler.get_access_token()
 
             if self.wifi_helper.is_online():
@@ -78,7 +77,6 @@ class Application:
                 # END DATASET BLOCK ###
 
                 # START POST LOG FILES ####
-                print("post logfiles if online")
                 if self.wifi_helper.is_online():
                     response = self.dataset_helper.post_log_files()
                     if not response:
@@ -86,14 +84,12 @@ class Application:
                 # END POST LOG FILES ####
 
                 # START CHECKING FAILED ATTEMPTS BLOCK
-                print("START CHECKING FAILED ATTEMPTS BLOCK")
                 if int(self.attempts) >= int(self.app_config.local_config.interval_attempts_before_restart):
                     self.error_helper.set_sensor_with_error(self.failed_sensor)
                     self.restart_hive("Too many errors: reboot system!", "error")
                 # END FAILED ATTEMPTS BLOCK ###
 
                 # START CHECKING UPDATE
-                print("START CHECKING UPDATE")
                 if self.wifi_helper.is_online() and self.app_config.local_config.auto_update:
                     self.update()
                 # END CHECKING UPDATE
@@ -106,7 +102,6 @@ class Application:
                 # END AUTO SHUTDOWN BLOCK ###
 
                 # WAIT BEFORE TAKE NEW DATASET
-                print("WAIT BEFORE TAKE NEW DATASET")
                 time.sleep(int(self.app_config.local_config.interval_app_wait_seconds))
                 # END WAIT ###
 
@@ -122,13 +117,11 @@ class Application:
 
     def update(self):
         try:
-            print("update")
             r = requests.get(mapping.version_url)
             git_version = r.content.decode("utf-8")
             old_version = self.app_config.local_config.version
 
             if r.status_code == 200:
-                print("github online")
                 if git_version > self.app_config.local_config.version:
                     pull = os.system("python3 /home/pi/gitupdate.py")
                     if pull == 0:
