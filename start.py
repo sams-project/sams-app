@@ -1,5 +1,4 @@
 from main.application import Application
-import os
 
 app = Application()
 
