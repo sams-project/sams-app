@@ -17,11 +17,11 @@ class LocalConfig:
         self.is_microphone = self.config['DEFAULT'].getboolean('is_microphone')
         self.is_ds18b20 = self.config['DEFAULT'].getboolean('is_ds18b20')
         self.auto_update = self.config['DEFAULT'].getboolean('auto_update')
-        self.version = self.config['DEFAULT']['version']
         self.auto_shutdown = self.config['DEFAULT'].getboolean('auto_shutdown')
         self.debug = self.config['DEFAULT'].getboolean('debug')
         self.is_online = self.config['DEFAULT'].getboolean('is_online')
         self.timezone = self.config['DEFAULT']['timezone']
+        self.version = self.get_version()
 
 
         # SCALE
@@ -53,9 +53,9 @@ class LocalConfig:
             self.auto_update = self.config['DEFAULT'].getboolean('auto_update')
             self.auto_shutdown = self.config['DEFAULT'].getboolean('auto_shutdown')
             self.debug = self.config['DEFAULT'].getboolean('debug')
-            self.version = self.config['DEFAULT']['version']
             self.is_online = self.config['DEFAULT'].getboolean('is_online')
             self.timezone = self.config['DEFAULT']['timezone']
+            self.version = self.get_version()
 
 
             # SCALE
@@ -82,6 +82,14 @@ class LocalConfig:
     def set_config_data(self, section, key, value):
         self.config.set(section, key, str(value))
         self.write_config()
+
+    @staticmethod
+    def get_version():
+        file = open(mapping.version_file, "r")
+        version = file.read()
+        file.close()
+        return version
+
 
     def write_config(self):
         try:

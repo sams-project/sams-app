@@ -34,6 +34,5 @@ class ApplicationConfig:
             else:
                 return False
 
-
         except Exception as e:
             send_log("Sync config Error: {}".format(e), "warning")

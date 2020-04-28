@@ -39,13 +39,13 @@ class Dataset:
 
     def get_data(self, sensor_type):
         dataset = False
-        if sensor_type == "DS18B20":
+        if sensor_type == "ds18b20":
             dataset = self.get_ds18b20_data()
-        elif sensor_type == "DHT22":
+        elif sensor_type == "dht22":
             dataset = self.get_dht22_data()
-        elif sensor_type == "MICROPHONE":
+        elif sensor_type == "microphone":
             dataset = self.get_microphone_data()
-        elif sensor_type == "SCALE":
+        elif sensor_type == "scale":
             dataset = self.get_scale_data()
 
         return dataset
