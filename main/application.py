@@ -15,8 +15,6 @@ import requests
 import mapping
 import git
 
-# test version
-
 
 class Application:
     def __init__(self):
@@ -128,7 +126,7 @@ class Application:
                 if git_version > self.app_config.local_config.version:
                     g = git.cmd.Git("/home/pi/sams_system")
                     g.pull()
-                    print("done")
+                    print("pull done")
                     self.restart_hive(f"update from {old_version} to {git_version}", "debug")
         except Exception as e:
             print(e)
