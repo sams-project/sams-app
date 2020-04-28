@@ -14,8 +14,6 @@ import os
 import requests
 import mapping
 
-# v 13
-
 
 class Application:
     def __init__(self):
