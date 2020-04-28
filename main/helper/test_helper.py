@@ -13,6 +13,14 @@ class AppTest:
         self.mic = MicrophoneHelper()
         self.dataset = Dataset()
         self.color_print = Color()
+        self.sensors = []
+
+        if self.app_config.local_config.is_dht22:
+            self.sensors.append("dht22")
+        if self.app_config.local_config.is_ds18b20:
+            self.sensors.append("ds18b20")
+        if self.app_config.local_config.is_scale:
+            self.sensors.append("scale")
 
     def app_status(self):
         # liefert den aktuellen Status der App zurück
@@ -38,18 +46,29 @@ class AppTest:
         return round(gigabytes_avail, 2)
 
     def dataset_test(self):
-        sensors = ["DHT22", "DS18B20", "SCALE"]
         self.color_print.bold("Starting test....")
-        for sensor in sensors:
+        test_data = {}
+        for sensor in self.sensors:
             testdata = self.dataset.get_data(sensor)
-            for data in testdata:
-                if hasattr(data, '__len__'):
-                    self.color_print.ok_green(f'{sensor} ..........OK!')
-                else:
-                    self.color_print.fail(f'{sensor} ..........FAILED!')
+            if testdata:
+                for data in testdata:
+                    if hasattr(data, '__len__'):
+                        test_data[sensor] = True
+                        self.color_print.ok_green(f'{sensor} ..........OK!')
+                    else:
+                        test_data[sensor] = False
+                        self.color_print.fail(f'{sensor} ..........FAILED!')
+            else:
+                test_data[sensor] = False
+                self.color_print.fail(f'{sensor} ..........FAILED!')
 
-        mic_test = self.mic.get_fft_data()
-        if mic_test:
-            self.color_print.ok_green("Microphone ..........OK!")
-        else:
-            self.color_print.fail("Microphone ..........FAILED!")
+        if self.app_config.local_config.is_microphone:
+            mic_test = self.mic.get_fft_data()
+            if mic_test:
+                test_data["microphone"] = True
+                self.color_print.ok_green("Microphone ..........OK!")
+            else:
+                test_data["microphone"] = False
+                self.color_print.fail("Microphone ..........FAILED!")
+
+        return test_data

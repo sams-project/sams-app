@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+        <nav class="breadcrumb">
+        <a href="/settings" class="button-icon"><i class="icon icon-arrow-left"></i></a>
+    </nav>
+    <ul class="sensorList">
+        {% for sensor, key in test_sensors.items() %}
+            <li>
+                {% if key %}
+                    <span class="ok">{{ sensor }}...ok!</span>
+                {% else %}
+                    <span class="fail">{{ sensor }}...failed!</span>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

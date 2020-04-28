@@ -128,6 +128,12 @@ def setting():
                            user_data=user_data)
 
 
+@app.route('/test')
+def sensor_test():
+    sensors = {'dht22': False, 'ds18b20': True, 'scale': True, 'microphone': True}
+    return render_template("test.html", test_sensors=sensors)
+
+
 @app.route('/timezone', methods=['POST'])
 def timezone():
     app_config.local_config.get_config_data()
