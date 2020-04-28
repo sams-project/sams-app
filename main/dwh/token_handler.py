@@ -55,7 +55,6 @@ class TokenHandler:
             else:
                 return False  # token is valid
         else:
-            print("is expired")
             return True  # no valid token in token.ini
 
     def handle_token(self):

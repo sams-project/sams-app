@@ -28,6 +28,7 @@ class Application:
         self.error_helper = ErrorHelper()
         self.failed_sensor = ""
 
+        self.token_handler.get_access_token()
         self.wifi_helper.update_online_status(False)
 
         # send status:
@@ -123,9 +124,6 @@ class Application:
 
             if r.status_code == 200:
                 if git_version > self.app_config.local_config.version:
-                    os.system("touch /home/pi/update")
-                    copyfile("/home/pi/sams_system/update.py", "/home/pi/update.py")
-                    self.app_config.local_config.set_config_data("DEFAULT", "version", git_version)
-                    self.restart_hive("updating system...", "debug")
+                    pass
         except Exception as e:
             print(e)

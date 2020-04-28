@@ -63,7 +63,7 @@ def write_version_number():
     print("\n")
     version = input("new version: ")
     version_file = open("/home/pi/sams_system/version.ini", "w+")
-    version_file.write(version)
+    version_file.write(str(version))
     version_file.close()
     color.ok_green(f"Version set to {version}")
     color.ok_green("DONE!")
@@ -74,5 +74,8 @@ reset_user_credentials()
 reset_token_config()
 reset_errors()
 delete_log_files()
-os.system("sudo rm /home/pi/update.py")
+try:
+    os.system("sudo rm /home/pi/update.py")
+except Exception:
+    pass
 write_version_number()

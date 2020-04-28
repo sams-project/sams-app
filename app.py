@@ -83,7 +83,7 @@ def start_and_reset():
 @app.route('/reset', methods=['POST'])  # reboot system
 def reset():
     os.system('sudo reboot')
-    return "Restart..."
+    return "You can close this tab. System is rebooting, this may take a while."
 
 
 # ####################### END SCALE SETUP ######################################
