@@ -15,7 +15,6 @@ import os
 import requests
 import mapping
 
-#  v.2.1
 
 class Application:
     def __init__(self):
@@ -122,9 +121,11 @@ class Application:
         try:
             r = requests.get(mapping.version_url)
             git_version = r.content.decode("utf-8")
+            old_version = self.app_config.local_config.version
 
             if r.status_code == 200:
                 if git_version > self.app_config.local_config.version:
-                    pass
+                    os.system("git pull origin master")
+                    self.restart_hive(f"update from {old_version} to {git_version}", "debug")
         except Exception as e:
             print(e)
