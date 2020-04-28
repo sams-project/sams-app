@@ -8,7 +8,6 @@ from main.dwh.token_handler import TokenHandler
 from main.helper.error_helper import ErrorHelper
 from main.helper.time_helper import get_time
 from main.helper.time_helper import set_timezone
-from shutil import copyfile
 
 import time
 import os
