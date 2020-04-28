@@ -126,7 +126,7 @@ class Application:
 
             if r.status_code == 200:
                 if git_version > self.app_config.local_config.version:
-                    pull = os.system("git pull origin master")
+                    pull = os.system("python3 /home/pi/gitupdate.py")
                     if pull == 0:
                         self.restart_hive(f"update from {old_version} to {git_version}", "debug")
         except Exception as e:
