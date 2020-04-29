@@ -128,15 +128,18 @@ def setting():
                            user_data=user_data)
 
 
+# ####################### SENSOR TESTING ######################################
 @app.route('/test')
 def sensor_test():
     sensors = {'dht22': False, 'ds18b20': True, 'scale': True, 'microphone': True}
     return render_template("test.html", test_sensors=sensors)
+# ####################### END SENSOR TESTING ######################################
 
 
+# ####################### SET TIME ZONE ######################################
 @app.route('/timezone', methods=['POST'])
 def timezone():
-    app_config.local_config.get_config_data()
+    get_config_data()
     new_timezone = app_config.local_config.timezone
     if request.form.get("timezone"):
         new_timezone = request.form.get("timezone")
@@ -144,8 +147,10 @@ def timezone():
         app_config.local_config.set_config_data("DEFAULT", "timezone", new_timezone)
 
     return render_template("timezone.html", timezone=new_timezone)
+# ####################### END TIME ZONE ######################################
 
 
+# ####################### GET CONFIG FROM DW OR LOCAL STORAGE ######################################
 def get_config_data():
     if wifi.is_online():
         app_config.sync_config()
@@ -154,6 +159,7 @@ def get_config_data():
 
     conf = app_config.local_config
     return conf
+# ####################### END GET CONFIG FROM DW OR LOCAL STORAGE ######################################
 
 
 if __name__ == '__main__':
