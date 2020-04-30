@@ -3,7 +3,6 @@
 .idea/vcs.xml
 /node_modules
 *.xml
-*.ini
 /src
 *.scss
 *.pyc
