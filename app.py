@@ -131,7 +131,7 @@ def setting():
 # ####################### SENSOR TESTING ######################################
 @app.route('/test')
 def sensor_test():
-    sensors = {'dht22': False, 'ds18b20': True, 'scale': True, 'microphone': True}
+    sensors = testing.dataset_test()
     return render_template("test.html", test_sensors=sensors)
 # ####################### END SENSOR TESTING ######################################
 
