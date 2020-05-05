@@ -1,6 +1,7 @@
 import json
 from main.dwh.data_api import DataApi
 import mapping
+import os
 
 
 class OnlineConfig:
@@ -45,12 +46,21 @@ class OnlineConfig:
                 self.audio_fs = data['group']['audio_fs']
                 self.timezone = data['group']['timezone']
 
-                if 'wittyPi' in data.keys():
+                try:
+                    if not os.path.exists(mapping.app_witty_pi):
+                        os.system(f'touch {mapping.app_witty_pi}')
                     with open(str(mapping.app_witty_pi), "w+") as filehandler:
-                        filehandler.writelines(data['wittyPi'])
+                        filehandler.writelines(data['group']['wittyPi'])
 
+                    if not os.path.exists(mapping.witty_pi):
+                        os.system(f'touch {mapping.witty_pi}')
                     with open(str(mapping.witty_pi), "w+") as filehandler:
-                        filehandler.writelines(data['wittyPi'])
+                        filehandler.writelines(data['group']['wittyPi'])
+                except Exception:
+                    os.system(f'rm {mapping.app_witty_pi}')
+                    os.system(f'rm {mapping.witty_pi}')
+                    pass
+
                 return True
 
         except Exception as e:

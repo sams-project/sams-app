@@ -23,7 +23,6 @@ class LocalConfig:
         self.timezone = self.config['DEFAULT']['timezone']
         self.version = self.get_version()
 
-
         # SCALE
         self.scale_ratio = self.config['SCALE']['ratio']
         self.scale_offset = self.config['SCALE']['offset']
@@ -57,7 +56,6 @@ class LocalConfig:
             self.timezone = self.config['DEFAULT']['timezone']
             self.version = self.get_version()
 
-
             # SCALE
             self.scale_ratio = self.config['SCALE']['ratio']
             self.scale_offset = self.config['SCALE']['offset']
@@ -90,12 +88,9 @@ class LocalConfig:
         file.close()
         return version
 
-
     def write_config(self):
         try:
             with open(self.path, 'w') as configfile:
                 self.config.write(configfile)
         except IOError:
             pass
-
-

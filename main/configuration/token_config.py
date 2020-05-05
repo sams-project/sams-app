@@ -1,6 +1,6 @@
 import configparser
 import mapping
-from main.helper.time_helper import get_time
+from main.helper.time_helper import get_token_time
 
 
 class TokenConfig:
@@ -24,7 +24,7 @@ class TokenConfig:
 
     def write_token(self, token, expires_in):
         self.config.set("DEFAULT", "token", token)
-        self.config.set("DEFAULT", "last_token", get_time())
+        self.config.set("DEFAULT", "last_token", get_token_time())
         self.config.set("DEFAULT", "expires_in", expires_in)
         self.write_config()
 

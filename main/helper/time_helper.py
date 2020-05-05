@@ -12,13 +12,18 @@ def get_time(is_dataset=False):
 
 
 def get_diff_seconds(last_time):
-    now = get_time()
+    now = get_token_time()
     if last_time != "":
         diff = datetime.datetime.strptime(now, '%Y-%m-%dT%H:%M:%S') \
-                - datetime.datetime.strptime(last_time, '%Y-%m-%dT%H:%M:%S')
+               - datetime.datetime.strptime(last_time, '%Y-%m-%dT%H:%M:%S')
         return int(diff.seconds)
     else:
         return False
+
+
+def get_token_time():
+    now = datetime.datetime.now()
+    return now.strftime('%Y-%m-%dT%H:%M:%S') + now.strftime('.%f')[:0]
 
 
 def set_timezone(timezone):
