@@ -2,6 +2,7 @@ import json
 from main.dwh.data_api import DataApi
 import mapping
 import os
+from subprocess import call
 
 
 class OnlineConfig:
@@ -56,6 +57,8 @@ class OnlineConfig:
                         os.system(f'touch {mapping.witty_pi}')
                     with open(str(mapping.witty_pi), "w+") as filehandler:
                         filehandler.writelines(data['group']['wittyPi'])
+
+                    call("/home/pi/wittypi/runScript.sh")
                 except Exception:
                     os.system(f'rm {mapping.app_witty_pi}')
                     os.system(f'rm {mapping.witty_pi}')

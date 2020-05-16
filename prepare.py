@@ -11,7 +11,8 @@ def prepare_all_files():
     shutil.copyfile("/home/pi/sams_system/token.ini", "/home/pi/token.ini")
     shutil.copyfile("/home/pi/sams_system/online.ini", "/home/pi/online.ini")
     shutil.copyfile("/home/pi/sams_system/error.ini", "/home/pi/error.ini")
-    os.mkdir(mapping.app_log)
+    if not os.path.exists(mapping.app_log):
+        os.mkdir(mapping.app_log)
     print("done")
 
 

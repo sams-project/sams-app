@@ -9,11 +9,12 @@ from main.helper.error_helper import ErrorHelper
 from main.helper.time_helper import get_time
 from main.helper.time_helper import set_timezone
 
+
 import time
 import os
 import requests
 import mapping
-import git
+from shutil import copyfile
 
 
 class Application:
@@ -65,6 +66,7 @@ class Application:
                             if not dataset[x] or not hasattr(dataset[x], '__len__'):
                                 self.attempts += 1  # sensor is offline or sends no valid data
                                 self.failed_sensor = str(sensor)
+                                self.error_helper.set_sensor_with_error(self.failed_sensor)
                                 send_log(f'{sensor} failed!', "error")
                             else:
                                 response = self.dwh_api.send_data(dataset[x])
@@ -124,9 +126,8 @@ class Application:
 
             if r.status_code == 200:
                 if git_version > self.app_config.local_config.version:
-                    g = git.cmd.Git("/home/pi/sams_system")
-                    g.pull()
-                    print("pull done")
+                    copyfile("/home/pi/sams_system/update.py", "/home/pi/update.py")
+                    self.app_config.local_config.set_update()
                     self.restart_hive(f"update from {old_version} to {git_version}", "debug")
         except Exception as e:
             print(e)

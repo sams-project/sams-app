@@ -11,6 +11,7 @@ class LocalConfig:
 
         # DEFAULT
         self.start = self.config['DEFAULT'].getboolean('start')
+        self.is_update = self.config['DEFAULT'].getboolean('update')
         self.group = self.config['DEFAULT']['group']
         self.is_dht22 = self.config['DEFAULT'].getboolean('is_dht22')
         self.is_scale = self.config['DEFAULT'].getboolean('is_scale')
@@ -34,7 +35,7 @@ class LocalConfig:
         self.interval_attempts_before_restart = self.config['INTERVAL']['attempts_before_restart']
 
         # DHT 22
-        self.dht22_pin = self.config['DHT22']['pin']
+        self.dht22_pin = self.config['DHT22']['dht22_pin']
 
         # AUDIO
         self.audio_duration = self.config['AUDIO']['duration']
@@ -67,7 +68,7 @@ class LocalConfig:
             self.interval_attempts_before_restart = self.config['INTERVAL']['attempts_before_restart']
 
             # DHT 22
-            self.dht22_pin = self.config['DHT22']['pin']
+            self.dht22_pin = self.config['DHT22']['dht22_pin']
 
             # AUDIO
             self.audio_duration = self.config['AUDIO']['duration']
@@ -87,6 +88,10 @@ class LocalConfig:
         version = file.read()
         file.close()
         return version
+
+    def set_update(self):
+        self.config.set("DEFAULT", "update", "1")
+        self.write_config()
 
     def write_config(self):
         try:

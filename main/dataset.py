@@ -102,7 +102,7 @@ class Dataset:
                     for i in range(int(self.config.interval_median)):
                         value = self.DS18B20.tempC(x)
                         if value == 998 or value == 85.0:
-                            send_log("DS18B20 does not work properly", "error")
+                            return False
                         else:
                             ds_temp.append(self.DS18B20.tempC(x))
                             time.sleep(3)
