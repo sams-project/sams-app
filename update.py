@@ -31,15 +31,13 @@ class Updater:
     def update(self):
         if self.start:
             if self.del_directory():
+                self.config.set("DEFAULT", "update", "0")
+                with open(self.path, 'w') as configfile:
+                    self.config.write(configfile)
                 if self.clone_directory():
-                    self.config.set("DEFAULT", "update", "0")
-                    with open(self.path, 'w') as configfile:
-                        self.config.write(configfile)
-                    time.sleep(60)
+                    time.sleep(120)
                     os.system('sudo reboot')
 
 
 updater = Updater()
 updater.update()
-
-# v 2.3 !
