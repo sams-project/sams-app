@@ -24,6 +24,7 @@ class OnlineConfig:
         self.auto_update = 0
         self.auto_shutdown = 0
         self.debug = 0
+        self.ignore_error = 0
         self.timezone = ""
 
     def get_config_data(self):
@@ -46,6 +47,7 @@ class OnlineConfig:
                 self.audio_duration = data['group']['audio_duration']
                 self.audio_fs = data['group']['audio_fs']
                 self.timezone = data['group']['timezone']
+                self.ignore_error = data['group']['ignore_error']
 
                 try:
                     if not os.path.exists(mapping.app_witty_pi):

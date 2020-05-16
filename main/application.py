@@ -9,7 +9,6 @@ from main.helper.error_helper import ErrorHelper
 from main.helper.time_helper import get_time
 from main.helper.time_helper import set_timezone
 
-
 import time
 import os
 import requests
@@ -49,14 +48,24 @@ class Application:
                 self.app_config.local_config.get_config_data()
             sensors = []
             try:
-                if self.app_config.local_config.is_ds18b20 and not self.error_helper.has_error("ds18b20"):
-                    sensors.append("ds18b20")  # TEMP SENSOR
-                if self.app_config.local_config.is_dht22 and not self.error_helper.has_error("dht22"):
-                    sensors.append("dht22")  # TEMP and HUMIDITY SENSOR
-                if self.app_config.local_config.is_scale and not self.error_helper.has_error("scale"):
-                    sensors.append("scale")
-                if self.app_config.local_config.is_microphone and not self.error_helper.has_error("microphone"):
-                    sensors.append("microphone")
+                if not self.app_config.local_config.ignore_error:
+                    if self.app_config.local_config.is_ds18b20 and not self.error_helper.has_error("ds18b20"):
+                        sensors.append("ds18b20")  # TEMP SENSOR
+                    if self.app_config.local_config.is_dht22 and not self.error_helper.has_error("dht22"):
+                        sensors.append("dht22")  # TEMP and HUMIDITY SENSOR
+                    if self.app_config.local_config.is_scale and not self.error_helper.has_error("scale"):
+                        sensors.append("scale")
+                    if self.app_config.local_config.is_microphone and not self.error_helper.has_error("microphone"):
+                        sensors.append("microphone")
+                else:
+                    if self.app_config.local_config.is_ds18b20:
+                        sensors.append("ds18b20")  # TEMP SENSOR
+                    if self.app_config.local_config.is_dht22:
+                        sensors.append("dht22")  # TEMP and HUMIDITY SENSOR
+                    if self.app_config.local_config.is_scale:
+                        sensors.append("scale")
+                    if self.app_config.local_config.is_microphone:
+                        sensors.append("microphone")
 
                 # START GET AND SEND DATASET BLOCK
                 for sensor in sensors:
@@ -124,10 +133,10 @@ class Application:
             git_version = r.content.decode("utf-8")
             old_version = self.app_config.local_config.version
 
-            if r.status_code == 200:
-                if git_version > self.app_config.local_config.version:
-                    copyfile("/home/pi/sams_system/update.py", "/home/pi/update.py")
-                    self.app_config.local_config.set_update()
-                    self.restart_hive(f"update from {old_version} to {git_version}", "debug")
+            if float(git_version) > float(self.app_config.local_config.version):
+                copyfile("/home/pi/sams_system/update.py", "/home/pi/update.py")
+                self.app_config.local_config.set_update()
+                self.restart_hive(f"update from {old_version} to {git_version}", "debug")
+
         except Exception as e:
             print(e)

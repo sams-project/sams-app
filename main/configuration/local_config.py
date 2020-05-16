@@ -11,6 +11,7 @@ class LocalConfig:
 
         # DEFAULT
         self.start = self.config['DEFAULT'].getboolean('start')
+        self.ignore_error = self.config['DEFAULT'].getboolean('ignore_error')
         self.is_update = self.config['DEFAULT'].getboolean('update')
         self.group = self.config['DEFAULT']['group']
         self.is_dht22 = self.config['DEFAULT'].getboolean('is_dht22')
@@ -46,6 +47,7 @@ class LocalConfig:
             self.config.read(self.path)
             # DEFAULT
             self.group = self.config['DEFAULT']['group']
+            self.ignore_error = self.config['DEFAULT'].getboolean('ignore_error')
             self.is_dht22 = self.config['DEFAULT'].getboolean('is_dht22')
             self.is_scale = self.config['DEFAULT'].getboolean('is_scale')
             self.is_microphone = self.config['DEFAULT'].getboolean('is_microphone')

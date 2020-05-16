@@ -12,6 +12,7 @@ class ApplicationConfig:
         try:
             if self.online_config.get_config_data():
                 self.local_config.set_config_data("DEFAULT", "group", self.online_config.groupname)
+                self.local_config.set_config_data("DEFAULT", "ignore_error", self.online_config.ignore_error)
                 self.local_config.set_config_data("DEFAULT", "is_dht22", self.online_config.is_dht22)
                 self.local_config.set_config_data("DEFAULT", "is_scale", self.online_config.is_scale)
                 self.local_config.set_config_data("DEFAULT", "is_microphone", self.online_config.is_microphone)
