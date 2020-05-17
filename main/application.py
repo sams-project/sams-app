@@ -134,7 +134,6 @@ class Application:
         send_log(f'{sensor} failed!', "error")
 
     def update(self):
-        print("updating now")
         try:
             r = requests.get(mapping.version_url)
             data = r.json()
@@ -143,7 +142,6 @@ class Application:
             print(git_version)
 
             if float(git_version) > float(self.app_config.local_config.version):
-                print("update")
                 if os.path.exists(mapping.update_file):
                     os.remove(mapping.update_file)
                 update_file = requests.get(mapping.update_file_url)
