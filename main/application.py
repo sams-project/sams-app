@@ -73,13 +73,13 @@ class Application:
                     if dataset:
                         for x in range(len(dataset)):
                             if not dataset[x] or not hasattr(dataset[x], '__len__'):
-                                self.sensor_error(sensor)
+                                self.sensor_error(sensor.upper())
                             else:
                                 response = self.dwh_api.send_data(dataset[x])
                                 if not response:
                                     self.dataset_helper.insert(dataset[x])  # save data
                     else:
-                        self.sensor_error(sensor)
+                        self.sensor_error(sensor.upper())
 
                 # END DATASET BLOCK ###
 
@@ -134,19 +134,21 @@ class Application:
         send_log(f'{sensor} failed!', "error")
 
     def update(self):
+        print("updating now")
         try:
             r = requests.get(mapping.version_url)
             data = r.json()
             git_version = data['files']['version']['content']
             old_version = self.app_config.local_config.version
+            print(git_version)
 
             if float(git_version) > float(self.app_config.local_config.version):
+                print("update")
                 if os.path.exists(mapping.update_file):
                     os.remove(mapping.update_file)
-
-                with open('update_test.py', 'wb+') as f:
-                    f.write(r.content)
-                copyfile(mapping.app_update_file, mapping.update_file)
+                update_file = requests.get(mapping.update_file_url)
+                with open(mapping.update_file, 'wb+') as f:
+                    f.write(update_file.content)
                 self.app_config.local_config.set_update()
                 self.restart_hive(f"update from {old_version} to {git_version}", "debug")
 

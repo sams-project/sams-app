@@ -48,9 +48,7 @@ class TokenHandler:
 
         if last_token != "":
             diff = get_diff_seconds(last_token)
-            print(diff)
             if diff >= float(expires_in):
-                print("token is expired")
                 return True  # token is expired
             else:
                 return False  # token is valid

@@ -62,9 +62,10 @@ class OnlineConfig:
 
                     call("/home/pi/wittypi/runScript.sh")
                 except Exception:
-                    print("delete wpi files")
-                    os.system(f'rm {mapping.app_witty_pi}')
-                    os.system(f'rm {mapping.witty_pi}')
+                    if os.path.exists(mapping.witty_pi):
+                        os.system(f'rm {mapping.witty_pi}')
+                    if os.path.exists(mapping.app_witty_pi):
+                        os.system(f'rm {mapping.app_witty_pi}')
                     pass
 
                 return True
