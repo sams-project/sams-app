@@ -27,13 +27,16 @@ class ErrorHelper:
         return errors
 
     def has_error(self, sensor):
-        sensor_data = self.get_sensor_data()
-        for sensors in sensor_data.items():
-            if sensor == str(sensors[0]):
-                if int(sensors[1]['errors']) >= 2 and int(sensors[1]['restarted']) >= 1:
-                    return True
-                else:
-                    return False
+        try:
+            sensor_data = self.get_sensor_data()
+            for sensors in sensor_data.items():
+                if sensor == str(sensors[0]):
+                    if int(sensors[1]['errors']) >= 2 and int(sensors[1]['restarted']) >= 1:
+                        return True
+                    else:
+                        return False
+        except Exception as e:
+            print(e)
 
     def set_sensor_with_error(self, sensor):
         self.config.read(self.path)

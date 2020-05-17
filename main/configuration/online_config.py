@@ -60,6 +60,7 @@ class OnlineConfig:
                     with open(str(mapping.witty_pi), "w+") as filehandler:
                         filehandler.writelines(data['group']['wittyPi'])
 
+                    call("/home/pi/wittypi/syncTime.sh")
                     call("/home/pi/wittypi/runScript.sh")
                 except Exception:
                     if os.path.exists(mapping.witty_pi):

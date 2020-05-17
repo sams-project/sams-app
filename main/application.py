@@ -35,7 +35,7 @@ class Application:
         send_log(f'Signal Strength: {self.wifi_helper.get_signal_strength()}', "debug")
         set_timezone(self.app_config.local_config.timezone)
         for failed_sensor in self.error_helper.get_sensors_with_errors():
-            send_log(f'Please check {failed_sensor} and reset all errors to reactivate the sensor.', "warning")
+            send_log(f'Please check {str(failed_sensor)} and reset all errors to reactivate the sensor.', "warning")
 
     def start(self):
         while True:
@@ -138,7 +138,6 @@ class Application:
             data = r.json()
             git_version = data['files']['version']['content']
             old_version = self.app_config.local_config.version
-            print(git_version)
 
             if float(git_version) > float(self.app_config.local_config.version):
                 if os.path.exists(mapping.update_file):
