@@ -23,7 +23,7 @@ class LocalConfig:
         self.debug = self.config['DEFAULT'].getboolean('debug')
         self.is_online = self.config['DEFAULT'].getboolean('is_online')
         self.timezone = self.config['DEFAULT']['timezone']
-        self.version = self.get_version()
+        self.version = self.config['DEFAULT']['version']
 
         # SCALE
         self.scale_ratio = self.config['SCALE']['ratio']
@@ -57,7 +57,7 @@ class LocalConfig:
             self.debug = self.config['DEFAULT'].getboolean('debug')
             self.is_online = self.config['DEFAULT'].getboolean('is_online')
             self.timezone = self.config['DEFAULT']['timezone']
-            self.version = self.get_version()
+            self.version = self.config['DEFAULT']['version']
 
             # SCALE
             self.scale_ratio = self.config['SCALE']['ratio']
@@ -83,13 +83,6 @@ class LocalConfig:
     def set_config_data(self, section, key, value):
         self.config.set(section, key, str(value))
         self.write_config()
-
-    @staticmethod
-    def get_version():
-        file = open(mapping.version_file, "r")
-        version = file.read()
-        file.close()
-        return version
 
     def set_update(self):
         self.config.set("DEFAULT", "update", "1")

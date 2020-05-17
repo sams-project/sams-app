@@ -148,6 +148,7 @@ class Application:
                 with open(mapping.update_file, 'wb+') as f:
                     f.write(update_file.content)
                 self.app_config.local_config.set_update()
+                self.app_config.local_config.set_config_data("DEFAULT", "version", str(git_version))
                 self.restart_hive(f"update from {old_version} to {git_version}", "debug")
 
         except Exception as e:
