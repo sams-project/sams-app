@@ -14,7 +14,6 @@ class Updater:
     @staticmethod
     def del_directory():
         try:
-            print("del tree")
             shutil.rmtree('/home/pi/sams_system', ignore_errors=True)
             return True
         except Exception:
@@ -28,8 +27,7 @@ class Updater:
                 return True
             else:
                 return False
-        except Exception as e:
-            print(e)
+        except Exception:
             return False
 
     def update(self):
@@ -41,10 +39,11 @@ class Updater:
                     self.config.set("DEFAULT", "update", "0")
                     with open(self.path, 'w') as configfile:
                         self.config.write(configfile)
-        except Exception as e:
-            print(e)
+                    time.sleep(60)
+                    os.system('sudo reboot')
+        except Exception:
+            pass
 
 
 updater = Updater()
 updater.update()
-#  v 2.3 !

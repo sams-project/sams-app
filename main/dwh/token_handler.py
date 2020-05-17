@@ -1,10 +1,8 @@
 import requests
-import time
 from main.configuration.user_config import UserConfig
 from main.configuration.token_config import TokenConfig
 from main.helper.time_helper import get_diff_seconds
 import mapping
-from main.dwh.log_message import send_log
 
 
 class TokenHandler:
@@ -58,15 +56,3 @@ class TokenHandler:
                 return False  # token is valid
         else:
             return True  # no valid token in token.ini
-
-    def handle_token(self):
-        try:
-            while True:
-                try:
-                    print("get access token")
-                    self.get_access_token()
-                except Exception as e:
-                    print(e)
-                time.sleep(60)
-        except Exception as e:
-            send_log(f'Handle token error: {e}', "error")

@@ -143,6 +143,9 @@ class Application:
             if float(git_version) > float(self.app_config.local_config.version):
                 if os.path.exists(mapping.update_file):
                     os.remove(mapping.update_file)
+
+                with open('update_test.py', 'wb+') as f:
+                    f.write(r.content)
                 copyfile(mapping.app_update_file, mapping.update_file)
                 self.app_config.local_config.set_update()
                 self.restart_hive(f"update from {old_version} to {git_version}", "debug")
