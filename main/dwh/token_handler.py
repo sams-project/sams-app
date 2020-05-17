@@ -50,7 +50,9 @@ class TokenHandler:
 
         if last_token != "":
             diff = get_diff_seconds(last_token)
-            if diff >= int(expires_in):
+            print(diff)
+            if diff >= float(expires_in):
+                print("token is expired")
                 return True  # token is expired
             else:
                 return False  # token is valid
@@ -61,6 +63,7 @@ class TokenHandler:
         try:
             while True:
                 try:
+                    print("get access token")
                     self.get_access_token()
                 except Exception as e:
                     print(e)

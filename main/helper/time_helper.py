@@ -16,7 +16,7 @@ def get_diff_seconds(last_time):
     if last_time != "":
         diff = datetime.datetime.strptime(now, '%Y-%m-%dT%H:%M:%S') \
                - datetime.datetime.strptime(last_time, '%Y-%m-%dT%H:%M:%S')
-        return int(diff.seconds)
+        return float(diff.total_seconds())
     else:
         return False
 

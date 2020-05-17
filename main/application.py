@@ -35,8 +35,8 @@ class Application:
         send_log(f'Start Application: {self.app_config.local_config.version}', "debug")
         send_log(f'Signal Strength: {self.wifi_helper.get_signal_strength()}', "debug")
         set_timezone(self.app_config.local_config.timezone)
-        for failed_sensor in self.error_helper.get_sensor_with_error():
-            send_log(f'Please check {failed_sensor} and reset all errors to reactivate the sensor.', "warning")
+        for failed_sensor in self.error_helper.get_sensors_with_errors():
+            send_log(f'Please check {failed_sensor[0]} and reset all errors to reactivate the sensor.', "warning")
 
     def start(self):
         while True:
@@ -49,13 +49,13 @@ class Application:
             sensors = []
             try:
                 if not self.app_config.local_config.ignore_error:
-                    if self.app_config.local_config.is_ds18b20 and not self.error_helper.has_error("ds18b20"):
+                    if self.app_config.local_config.is_ds18b20 and not self.error_helper.has_error("DS18B20"):
                         sensors.append("ds18b20")  # TEMP SENSOR
-                    if self.app_config.local_config.is_dht22 and not self.error_helper.has_error("dht22"):
+                    if self.app_config.local_config.is_dht22 and not self.error_helper.has_error("DHT22"):
                         sensors.append("dht22")  # TEMP and HUMIDITY SENSOR
-                    if self.app_config.local_config.is_scale and not self.error_helper.has_error("scale"):
+                    if self.app_config.local_config.is_scale and not self.error_helper.has_error("SCALE"):
                         sensors.append("scale")
-                    if self.app_config.local_config.is_microphone and not self.error_helper.has_error("microphone"):
+                    if self.app_config.local_config.is_microphone and not self.error_helper.has_error("MICROPHONE"):
                         sensors.append("microphone")
                 else:
                     if self.app_config.local_config.is_ds18b20:
@@ -73,18 +73,13 @@ class Application:
                     if dataset:
                         for x in range(len(dataset)):
                             if not dataset[x] or not hasattr(dataset[x], '__len__'):
-                                self.attempts += 1  # sensor is offline or sends no valid data
-                                self.failed_sensor = str(sensor)
-                                self.error_helper.set_sensor_with_error(self.failed_sensor)
-                                send_log(f'{sensor} failed!', "error")
+                                self.sensor_error(sensor)
                             else:
                                 response = self.dwh_api.send_data(dataset[x])
                                 if not response:
                                     self.dataset_helper.insert(dataset[x])  # save data
                     else:
-                        self.attempts += 1  # sensor is offline or sends no valid data
-                        self.failed_sensor = str(sensor)
-                        send_log(f'{sensor} failed!', "error")
+                        self.sensor_error(sensor)
 
                 # END DATASET BLOCK ###
 
@@ -97,7 +92,7 @@ class Application:
 
                 # START CHECKING FAILED ATTEMPTS BLOCK
                 if int(self.attempts) >= int(self.app_config.local_config.interval_attempts_before_restart):
-                    self.error_helper.set_sensor_with_error(self.failed_sensor)
+                    self.error_helper.set_sensor_restarted(self.failed_sensor)
                     self.restart_hive("Too many errors: reboot system!", "error")
                 # END FAILED ATTEMPTS BLOCK ###
 
@@ -127,14 +122,28 @@ class Application:
         time.sleep(120)
         os.system('sudo reboot')
 
+    def sensor_error(self, sensor):  # sensor is offline or sends no valid data
+        self.attempts += 1
+        self.failed_sensor = str(sensor)
+        if os.path.exists(mapping.witty_pi):
+            self.error_helper.set_sensor_with_error(sensor)
+            self.error_helper.set_sensor_restarted(sensor)
+        else:
+            self.error_helper.set_sensor_with_error(sensor)
+
+        send_log(f'{sensor} failed!', "error")
+
     def update(self):
         try:
             r = requests.get(mapping.version_url)
-            git_version = r.content.decode("utf-8")
+            data = r.json()
+            git_version = data['files']['version']['content']
             old_version = self.app_config.local_config.version
 
             if float(git_version) > float(self.app_config.local_config.version):
-                copyfile("/home/pi/sams_system/update.py", "/home/pi/update.py")
+                if os.path.exists(mapping.update_file):
+                    os.remove(mapping.update_file)
+                copyfile(mapping.app_update_file, mapping.update_file)
                 self.app_config.local_config.set_update()
                 self.restart_hive(f"update from {old_version} to {git_version}", "debug")
 

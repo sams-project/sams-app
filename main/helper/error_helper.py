@@ -7,30 +7,50 @@ class ErrorHelper:
         self.path = mapping.sensor_errors
         self.config = configparser.ConfigParser()
 
-    def get_sensor_with_error(self):
+    def get_sensor_data(self):
         self.config.read(self.path)
         errors = {}
-        for key in self.config.defaults():
-            if int(self.config['DEFAULT'].get(key)) > 2:  # two errors from the same sensor between 2 reboots
-                errors[key] = self.config['DEFAULT'].get(key)
+        for key in self.config.items():
+            if not "DEFAULT" in key:
+                errors[key[0]] = {"errors": self.config[key[0]].get('errors'),
+                                  "restarted": self.config[key[0]].get('restarted')}
+
+        return errors
+
+    def get_sensors_with_errors(self):
+        sensor_data = self.get_sensor_data()
+        errors = {}
+        for sensors in sensor_data.items():
+            if int(sensors[1]['errors']) >= 2 and int(sensors[1]['restarted']) >= 1:
+                errors[sensors[0]] = "True"
 
         return errors
 
     def has_error(self, sensor):
-        errors = self.get_sensor_with_error()
-        for error in errors:
-            if error == sensor:
-                return True
-
-        return False
+        sensor_data = self.get_sensor_data()
+        for sensors in sensor_data.items():
+            if sensor == str(sensors[0]):
+                if int(sensors[1]['errors']) >= 2 and int(sensors[1]['restarted']) >= 1:
+                    return True
+                else:
+                    return False
 
     def set_sensor_with_error(self, sensor):
         self.config.read(self.path)
-        for key in self.config.defaults():
-            if str(key) == sensor:
-                error_count = int(self.config['DEFAULT'].get(key))
+        for key in self.config.items():
+            if str(key[0]) == sensor:
+                error_count = int(self.config[key[0]].get("errors"))
                 error_count += 1
-                self.config.set("DEFAULT", str(key), str(error_count))
+                self.config.set(key[0], "errors", str(error_count))
+                self.write_config()
+
+    def set_sensor_restarted(self, sensor):
+        self.config.read(self.path)
+        for key in self.config.items():
+            if str(key[0]) == sensor:
+                error_count = int(self.config[key[0]].get("restarted"))
+                error_count += 1
+                self.config.set(key[0], "restarted", str(error_count))
                 self.write_config()
 
     def reset_errors(self):
