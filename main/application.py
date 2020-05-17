@@ -13,7 +13,6 @@ import time
 import os
 import requests
 import mapping
-from shutil import copyfile
 
 
 class Application:
