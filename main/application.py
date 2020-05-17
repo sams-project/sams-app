@@ -35,7 +35,7 @@ class Application:
         send_log(f'Signal Strength: {self.wifi_helper.get_signal_strength()}', "debug")
         set_timezone(self.app_config.local_config.timezone)
         for failed_sensor in self.error_helper.get_sensors_with_errors():
-            send_log(f'Please check {failed_sensor[0]} and reset all errors to reactivate the sensor.', "warning")
+            send_log(f'Please check {failed_sensor} and reset all errors to reactivate the sensor.', "warning")
 
     def start(self):
         while True:
