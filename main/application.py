@@ -32,6 +32,7 @@ class Application:
 
         # send status:
         try:
+            print("start init")
             send_log(f'Start Application: {self.app_config.local_config.version}', "debug")
             send_log(f'Signal Strength: {self.wifi_helper.get_signal_strength()}', "debug")
             set_timezone(self.app_config.local_config.timezone)
@@ -42,6 +43,7 @@ class Application:
 
     def start(self):
         while True:
+            print("start while true")
             try:
                 self.token_handler.get_access_token()
 
