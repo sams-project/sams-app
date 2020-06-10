@@ -31,22 +31,28 @@ class Application:
         self.wifi_helper.update_online_status(False)
 
         # send status:
-        send_log(f'Start Application: {self.app_config.local_config.version}', "debug")
-        send_log(f'Signal Strength: {self.wifi_helper.get_signal_strength()}', "debug")
-        set_timezone(self.app_config.local_config.timezone)
-        for failed_sensor in self.error_helper.get_sensors_with_errors():
-            send_log(f'Please check {str(failed_sensor)} and reset all errors to reactivate the sensor.', "warning")
+        try:
+            send_log(f'Start Application: {self.app_config.local_config.version}', "debug")
+            send_log(f'Signal Strength: {self.wifi_helper.get_signal_strength()}', "debug")
+            set_timezone(self.app_config.local_config.timezone)
+            for failed_sensor in self.error_helper.get_sensors_with_errors():
+                send_log(f'Please check {str(failed_sensor)} and reset all errors to reactivate the sensor.', "warning")
+        except Exception as e:
+            print(e)
 
     def start(self):
         while True:
-            self.token_handler.get_access_token()
-
-            if self.wifi_helper.is_online():
-                self.app_config.sync_config()
-            else:
-                self.app_config.local_config.get_config_data()
-            sensors = []
             try:
+                self.token_handler.get_access_token()
+
+                if self.wifi_helper.is_online():
+                    self.app_config.sync_config()
+                else:
+                    self.app_config.local_config.get_config_data()
+            except Exception as e:
+                print(e)
+            try:
+                sensors = []
                 if not self.app_config.local_config.ignore_error:
                     if self.app_config.local_config.is_ds18b20 and not self.error_helper.has_error("DS18B20"):
                         sensors.append("ds18b20")  # TEMP SENSOR
