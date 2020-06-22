@@ -33,14 +33,14 @@ class Updater:
     def update(self):
         try:
             if self.start:
-                self.del_directory()
-                cloning = self.clone_directory()
-                if cloning:
-                    self.config.set("DEFAULT", "update", "0")
-                    with open(self.path, 'w') as configfile:
-                        self.config.write(configfile)
-                    time.sleep(60)
-                    os.system('sudo reboot')
+                if self.del_directory():
+                    cloning = self.clone_directory()
+                    if cloning:
+                        self.config.set("DEFAULT", "update", "0")
+                        with open(self.path, 'w') as configfile:
+                            self.config.write(configfile)
+                        time.sleep(60)
+                        os.system('sudo reboot')
         except Exception:
             pass
 

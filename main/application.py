@@ -26,14 +26,13 @@ class Application:
         self.token_handler = TokenHandler()
         self.error_helper = ErrorHelper()
         self.failed_sensor = ""
+        self.handle_online_status()
 
-        self.token_handler.get_access_token()
-        self.wifi_helper.update_online_status(False)
 
         # send status:
         try:
-            print("start init")
             send_log(f'Start Application: {self.app_config.local_config.version}', "debug")
+            send_log(f'Config Name: {self.app_config.local_config.group}', "debug")
             send_log(f'Signal Strength: {self.wifi_helper.get_signal_strength()}', "debug")
             set_timezone(self.app_config.local_config.timezone)
             for failed_sensor in self.error_helper.get_sensors_with_errors():
@@ -43,17 +42,9 @@ class Application:
 
     def start(self):
         while True:
-            print("start while true")
             try:
-                self.token_handler.get_access_token()
-
-                if self.wifi_helper.is_online():
-                    self.app_config.sync_config()
-                else:
-                    self.app_config.local_config.get_config_data()
-            except Exception as e:
-                print(e)
-            try:
+                # before do anything, handle on / offline status and config
+                self.handle_online_status()
                 sensors = []
                 if not self.app_config.local_config.ignore_error:
                     if self.app_config.local_config.is_ds18b20 and not self.error_helper.has_error("DS18B20"):
@@ -157,5 +148,22 @@ class Application:
                 self.app_config.local_config.set_config_data("DEFAULT", "version", str(git_version))
                 self.restart_hive(f"update from {old_version} to {git_version}", "debug")
 
+        except Exception as e:
+            print(e)
+
+    def handle_online_status(self):
+        try:
+            # check if system has valid access token
+            # write online status
+            if not self.token_handler.get_access_token():
+                self.wifi_helper.update_online_status(False)
+            else:
+                self.wifi_helper.update_online_status(True)
+            # check online status
+            # sync config (on- or offline)
+            if self.wifi_helper.is_online():
+                self.app_config.sync_config()
+            else:
+                self.app_config.local_config.get_config_data()
         except Exception as e:
             print(e)

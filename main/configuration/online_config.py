@@ -62,12 +62,12 @@ class OnlineConfig:
 
                     call("/home/pi/wittypi/syncTime.sh")
                     call("/home/pi/wittypi/runScript.sh")
-                except Exception:
+                except Exception as e:
                     if os.path.exists(mapping.witty_pi):
                         os.system(f'rm {mapping.witty_pi}')
                     if os.path.exists(mapping.app_witty_pi):
                         os.system(f'rm {mapping.app_witty_pi}')
-                    pass
+                    print(e)
 
                 return True
 

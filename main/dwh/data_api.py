@@ -32,7 +32,7 @@ class DataApi:
             if resp.status_code == 200:  # Dataset OK
                 self.wifi_helper.update_online_status(True)
                 return True
-            if resp.status_code == 400 or resp.status_code == 500:  # 400 or 500 (Dataset corrupted)
+            if resp.status_code == 400:  # 400 (Dataset corrupted)
                 return "delete"
 
         except Exception:

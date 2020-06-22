@@ -1,5 +1,5 @@
 # SAMS Project
-![Sams Project](https://beemoactivity.herokuapp.com/static/images/dsn_sams_logo.png "Sams Project")
+![Sams Project](sams_logo.png "Sams Project")
 ### Beehive monitoring software for Raspberry Pi
 Software for running a Raspberry Pi as a data logger for sensor data on temperature, humidity, acoustics and weight. Software includes configuration of measurement intervals and frequency spectra as well as calibration of the load cell to log weight data. This software can only be used in conjunction with a Raspbian Stretch Image (https://www.raspberrypi.org) and is developed within the SAMS project. 
 
