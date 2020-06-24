@@ -22,7 +22,7 @@ class Updater:
     @staticmethod
     def clone_directory():
         try:
-            clone = os.system("sudo git clone https://github.com/anderswodenker/sams-app.git /home/pi/sams_system")
+            clone = os.system("sudo git clone https://github.com/sams-project/sams-app.git /home/pi/sams_system")
             if clone == 0:
                 return True
             else:
