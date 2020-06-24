@@ -41,7 +41,7 @@ This application is based on Flask (https://palletsprojects.com/p/flask/), a web
 
 ## Gerber
 
-![alt text](https://raw.githubusercontent.com/sams-project/monitor/master/sams-project-gerber.png "gerber front view")
+![gerber Preview](sams-project-gerber.png "gerber front view")
 
 Gerberfile: 
-[https://github.com/sams-project/monitor/blob/master/gerber-sams-project.zip]
+[gerber-sams-project.zip](gerber-sams-project.zip)
