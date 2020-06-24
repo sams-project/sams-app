@@ -50,18 +50,27 @@ class OnlineConfig:
                 self.ignore_error = data['group']['ignore_error']
 
                 try:
-                    if not os.path.exists(mapping.app_witty_pi):
+                    if os.path.exists(mapping.app_witty_pi):
+                        os.system(f'rm {mapping.app_witty_pi}')
                         os.system(f'touch {mapping.app_witty_pi}')
+                    else:
+                        os.system(f'touch {mapping.app_witty_pi}')
+
                     with open(str(mapping.app_witty_pi), "w+") as filehandler:
                         filehandler.writelines(data['group']['wittyPi'])
 
-                    if not os.path.exists(mapping.witty_pi):
+                    if os.path.exists(mapping.witty_pi):
+                        os.system(f'rm {mapping.witty_pi}')
                         os.system(f'touch {mapping.witty_pi}')
+                    else:
+                        os.system(f'touch {mapping.witty_pi}')
+
                     with open(str(mapping.witty_pi), "w+") as filehandler:
                         filehandler.writelines(data['group']['wittyPi'])
 
                     call("/home/pi/wittypi/syncTime.sh")
                     call("/home/pi/wittypi/runScript.sh")
+
                 except Exception as e:
                     if os.path.exists(mapping.witty_pi):
                         os.system(f'rm {mapping.witty_pi}')

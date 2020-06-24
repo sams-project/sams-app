@@ -11,7 +11,6 @@ class TokenHandler:
         self.token_config = TokenConfig()
         self.expires_in = 0
         self.auth = {}
-        self.known_error = "Failed to establish a new connection"
 
         self.token_dataset = {
             "client_id": self.user_config.client_id,
@@ -29,6 +28,8 @@ class TokenHandler:
                     headers={'content-type': "application/json"}
                 ).json()
 
+                requests.session().close()
+
                 if 'error' in self.auth:
                     self.token_config.write_token_error(str(self.auth['error']))
                     return False
@@ -36,6 +37,7 @@ class TokenHandler:
                     token = self.auth['token_type'] + ' ' + self.auth['access_token']
                     expires = self.auth['expires_in']
                     self.token_config.write_token(token, str(expires))
+
                     return True
             except Exception as e:
                 self.token_config.write_token_error(str(e))
@@ -46,11 +48,6 @@ class TokenHandler:
         token_data = self.token_config.read_token()
         last_token = token_data["last_token"]
         expires_in = token_data["expires_in"]
-        error = token_data["token_error"]
-        if self.known_error in error:
-            # todo reset config und stell sicher dass nur ein weiteres mal versucht wird eine Verbindung aufzubauen
-            pass
-
 
         if last_token != "":
             diff = get_diff_seconds(last_token)

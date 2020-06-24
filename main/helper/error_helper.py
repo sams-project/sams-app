@@ -11,7 +11,7 @@ class ErrorHelper:
         self.config.read(self.path)
         errors = {}
         for key in self.config.items():
-            if not "DEFAULT" in key:
+            if "DEFAULT" not in key:
                 errors[key[0]] = {"errors": self.config[key[0]].get('errors'),
                                   "restarted": self.config[key[0]].get('restarted')}
 
