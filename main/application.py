@@ -28,7 +28,6 @@ class Application:
         self.failed_sensor = ""
         self.handle_online_status()
 
-
         # send status:
         try:
             send_log(f'Start Application: {self.app_config.local_config.version}', "debug")
@@ -46,16 +45,17 @@ class Application:
                 # before do anything, handle on / offline status and config
                 self.handle_online_status()
                 sensors = []
-                if not self.app_config.local_config.ignore_error:
+                if not self.app_config.local_config.ignore_error:  # if not ignore error
                     if self.app_config.local_config.is_ds18b20 and not self.error_helper.has_error("DS18B20"):
                         sensors.append("ds18b20")  # TEMP SENSOR
                     if self.app_config.local_config.is_dht22 and not self.error_helper.has_error("DHT22"):
                         sensors.append("dht22")  # TEMP and HUMIDITY SENSOR
+                        print(self.app_config.local_config.is_dht22)
                     if self.app_config.local_config.is_scale and not self.error_helper.has_error("SCALE"):
                         sensors.append("scale")
                     if self.app_config.local_config.is_microphone and not self.error_helper.has_error("MICROPHONE"):
                         sensors.append("microphone")
-                else:
+                else:  # if ignore all errors
                     if self.app_config.local_config.is_ds18b20:
                         sensors.append("ds18b20")  # TEMP SENSOR
                     if self.app_config.local_config.is_dht22:

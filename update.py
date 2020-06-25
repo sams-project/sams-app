@@ -39,6 +39,7 @@ class Updater:
                         self.config.set("DEFAULT", "update", "0")
                         with open(self.path, 'w') as configfile:
                             self.config.write(configfile)
+                        os.system("sudo chown pi:pi -R /home/pi/sams_system")
                         time.sleep(60)
                         os.system('sudo reboot')
         except Exception:
