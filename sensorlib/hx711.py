@@ -22,7 +22,6 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 import RPi.GPIO as GPIO
 import time
-import sys
 GPIO.setwarnings(False)
 
 
@@ -122,7 +121,7 @@ class HX711:
             GPIO.output(self.PD_SCK, True)
             count = count << 1
             GPIO.output(self.PD_SCK, False)
-            if(GPIO.input(self.DOUT)):
+            if GPIO.input(self.DOUT):
                 count += 1
 
         GPIO.output(self.PD_SCK, True)
@@ -136,7 +135,7 @@ class HX711:
 
         return count
 
-    def read_average(self, times=16):
+    def read_average(self, times=8):
         """
         Calculate average value from
         :param times: measure x amount of time to get average
@@ -144,9 +143,10 @@ class HX711:
         sum = 0
         for i in range(times):
             sum += self.read()
+            time.sleep(0.5)
         return sum / times
 
-    def get_grams(self, times=16):
+    def get_grams(self, times=8):
         """
         :param times: Set value to calculate average,
         be aware that high number of times will have a

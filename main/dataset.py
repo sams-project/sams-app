@@ -137,7 +137,7 @@ class Dataset:
                 dhtdata = self.dht22.get_data()
                 temp.append(dhtdata['temp'])
                 hum.append(dhtdata['hum'])
-                time.sleep(int(self.config.interval_wait_time_seconds))
+                time.sleep(1)
 
             median_temp = median(temp)
             median_hum = median(hum)
