@@ -45,7 +45,7 @@ class Application:
     def start(self):
         while True:
             try:
-                # before do anything, handle on / offline status and config
+                # before do anything, handle on / offline status and try to sync config
                 self.handle_online_status()
                 sensors = []
                 if not self.app_config.local_config.ignore_error:  # if not ignore error
