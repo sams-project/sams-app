@@ -7,3 +7,4 @@
 *.scss
 *.pyc
 main/__pycache__
+*.pdf
