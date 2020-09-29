@@ -17,3 +17,5 @@ version_file = "/home/pi/sams_system/version.ini"
 app_witty_pi = "/home/pi/wittypi/schedules/sams.wpi"
 witty_pi = "/home/pi/wittypi/schedule.wpi"
 witty_pi_log = "/home/pi/wittypi/wittyPi.log"
+
+files = [user_config, app_config, default_config, token_config, online_status,sensor_errors]

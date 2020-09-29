@@ -8,6 +8,7 @@ from main.dwh.token_handler import TokenHandler
 from main.helper.error_helper import ErrorHelper
 from main.helper.time_helper import get_time
 from main.helper.time_helper import set_timezone
+from main.helper.self_checker import SelfChecker
 
 import time
 import os
@@ -27,6 +28,7 @@ class Application:
         self.error_helper = ErrorHelper()
         self.failed_sensor = ""
         self.handle_online_status()
+        self.checker = SelfChecker()
 
         # send status:
         try:
@@ -37,6 +39,9 @@ class Application:
                 send_log(f'Voltage: {self.current_volt()}', "debug")
 
             set_timezone(self.app_config.local_config.timezone)
+
+            for file, status in self.checker.check_files().items():
+                send_log(f"created file: {file}.", "warning")
             for failed_sensor in self.error_helper.get_sensors_with_errors():
                 send_log(f'Please check {str(failed_sensor)} and reset all errors to reactivate the sensor.', "warning")
         except Exception as e:
