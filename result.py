@@ -1,6 +1,5 @@
 from tinydb import TinyDB, Query
 
-
 db = TinyDB('/home/pi/sams_system/testing.json')
 
 data = Query()

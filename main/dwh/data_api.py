@@ -1,6 +1,7 @@
 import requests
 from main.configuration.token_config import TokenConfig
 from main.helper.wifi_helper import WifiHelper
+from main.dwh.log_message import send_log
 import mapping
 import time
 
@@ -34,6 +35,8 @@ class DataApi:
                 return True
             if resp.status_code == 400:  # 400 (Dataset corrupted)
                 return "delete"
+
+            send_log(f"api status code: {resp.status_code}", "debug")
 
         except Exception:
             self.wifi_helper.update_online_status(False)

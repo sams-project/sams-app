@@ -86,7 +86,7 @@ class Dataset:
             if median(data[0]) == 0:  # no microphone available
                 return {"status": False, "info": "Microphone is not working", "time": get_time()}
             else:
-                return {"status": True, "info": "passed", "time": get_time()}
+                return {"status": True, "info": dataset, "time": get_time()}
 
         except Exception as e:
             return {"status": False, "info": e, "time": get_time()}

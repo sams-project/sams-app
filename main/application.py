@@ -78,13 +78,13 @@ class Application:
                     if dataset:
                         for x in range(len(dataset)):
                             if not dataset[x] or not hasattr(dataset[x], '__len__'):
-                                self.sensor_error(sensor.upper())
+                                self.sensor_error(sensor.upper(), error_msg="dataset has no length")
                             else:
-                                response = self.dwh_api.send_data(dataset[x])
+                                response = self.dwh_api.send_data(dataset[x]["info"])
                                 if not response:
-                                    self.dataset_helper.insert(dataset[x])  # save data
+                                    self.dataset_helper.insert(dataset[x]["info"])  # save data
                     else:
-                        self.sensor_error(sensor.upper())
+                        self.sensor_error(sensor.upper(), error_msg=dataset["info"])
 
                 # END DATASET BLOCK ###
 
@@ -127,7 +127,7 @@ class Application:
         time.sleep(120)
         os.system('sudo reboot')
 
-    def sensor_error(self, sensor):  # sensor is offline or sends no valid data
+    def sensor_error(self, sensor, error_msg="failed"):  # sensor is offline or sends no valid data
         self.attempts += 1
         self.failed_sensor = str(sensor)
         if os.path.exists(mapping.witty_pi):
@@ -136,7 +136,7 @@ class Application:
         else:
             self.error_helper.set_sensor_with_error(sensor)
 
-        send_log(f'{sensor} failed!', "error")
+        send_log(f'{sensor} | {error_msg}', "error")
 
     def update(self):
         try:
