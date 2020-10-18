@@ -84,12 +84,12 @@ class Dataset:
                 ]
             }]]
             if median(data[0]) == 0:  # no microphone available
-                return False
+                return {"status": False, "info": "Microphone is not working", "time": get_time()}
             else:
-                return dataset
+                return {"status": True, "info": "passed", "time": get_time()}
 
-        except Exception:
-            return False
+        except Exception as e:
+            return {"status": False, "info": e, "time": get_time()}
 
     def get_ds18b20_data(self):
         self.config.get_config_data()
