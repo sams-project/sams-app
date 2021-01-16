@@ -24,6 +24,8 @@ class Updater:
         try:
             clone = os.system("sudo git clone https://github.com/sams-project/sams-app.git /home/pi/sams_system")
             if clone == 0:
+                # todo: remove in the next version (2.49)
+                os.system("sudo apt install -y python3-gpiozero")  # prepare for RGB LED
                 return True
             else:
                 return False

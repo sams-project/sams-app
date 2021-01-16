@@ -1,5 +1,7 @@
 import configparser
 import mapping
+import os
+from shutil import copyfile
 
 
 class ErrorHelper:
@@ -8,7 +10,12 @@ class ErrorHelper:
         self.config = configparser.ConfigParser()
 
     def get_sensor_data(self):
-        self.config.read(self.path)
+        if os.path.exists(self.path):
+            self.config.read(self.path)
+        else:
+            # if error.ini doesnt exist, copy a new one to home dir
+            copyfile("/home/pi/sams_system/error.ini", "/home/pi/error.ini")
+            self.config.read(self.path)
         errors = {}
         for key in self.config.items():
             if "DEFAULT" not in key:

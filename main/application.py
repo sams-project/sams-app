@@ -8,6 +8,7 @@ from main.dwh.token_handler import TokenHandler
 from main.helper.error_helper import ErrorHelper
 from main.helper.time_helper import get_time
 from main.helper.time_helper import set_timezone
+from main.helper.self_checker import SelfChecker
 
 import time
 import os
@@ -27,13 +28,20 @@ class Application:
         self.error_helper = ErrorHelper()
         self.failed_sensor = ""
         self.handle_online_status()
+        self.checker = SelfChecker()
 
         # send status:
         try:
             send_log(f'Start Application: {self.app_config.local_config.version}', "debug")
             send_log(f'Config Name: {self.app_config.local_config.group}', "debug")
             send_log(f'Signal Strength: {self.wifi_helper.get_signal_strength()}', "debug")
+            if self.current_volt():
+                send_log(f'Voltage: {self.current_volt()}', "debug")
+
             set_timezone(self.app_config.local_config.timezone)
+
+            for file, status in self.checker.check_files().items():
+                send_log(f"created file: {file}.", "warning")
             for failed_sensor in self.error_helper.get_sensors_with_errors():
                 send_log(f'Please check {str(failed_sensor)} and reset all errors to reactivate the sensor.', "warning")
         except Exception as e:
@@ -42,7 +50,7 @@ class Application:
     def start(self):
         while True:
             try:
-                # before do anything, handle on / offline status and config
+                # before do anything, handle on / offline status and try to sync config
                 self.handle_online_status()
                 sensors = []
                 if not self.app_config.local_config.ignore_error:  # if not ignore error
@@ -50,7 +58,6 @@ class Application:
                         sensors.append("ds18b20")  # TEMP SENSOR
                     if self.app_config.local_config.is_dht22 and not self.error_helper.has_error("DHT22"):
                         sensors.append("dht22")  # TEMP and HUMIDITY SENSOR
-                        print(self.app_config.local_config.is_dht22)
                     if self.app_config.local_config.is_scale and not self.error_helper.has_error("SCALE"):
                         sensors.append("scale")
                     if self.app_config.local_config.is_microphone and not self.error_helper.has_error("MICROPHONE"):
@@ -167,3 +174,17 @@ class Application:
                 self.app_config.local_config.get_config_data()
         except Exception as e:
             print(e)
+
+    @staticmethod
+    def current_volt():
+        try:
+            v_out = []
+            with open(mapping.witty_pi_log) as f:
+                for i, line in enumerate(f):
+                    if 'Current Vout' in line:
+                        v_out.append(line)
+            length = len(v_out) - 1
+
+            return v_out[length][:-1]
+        except Exception:
+            return False
