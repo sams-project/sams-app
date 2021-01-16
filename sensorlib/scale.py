@@ -76,7 +76,7 @@ class Scale:
     def get_data(self):
         try:
             self.hx.power_up()
-            val = self.hx.get_grams()
+            val = self.hx.get_grams(times=1)
             measure_weight = round((val / 1000), 2)
             self.hx.power_down()
             return measure_weight
