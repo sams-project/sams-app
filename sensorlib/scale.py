@@ -76,12 +76,15 @@ class Scale:
     def get_data(self):
         try:
             self.hx.power_up()
-            val = self.hx.get_grams(times=1)
+            vals = []
+            for i in range(5):
+                vals.append(self.hx.get_grams(times=1))
+            val = median(vals)
             measure_weight = round((val / 1000), 2)
             self.hx.power_down()
             return measure_weight
-        except Exception as e:
-            send_log(f'Cannot get Scale data: {e}', "error")
+        except Exception:
+            pass
 
     def reset(self):
         self.config.set_config_data("SCALE", "ratio", 0)
